@@ -1,11 +1,32 @@
-# LocalGems Backend - ELITE EDITION 💎
+# ⚙️ LocalGems Backend - Elite Engine
 
-> **Production-Grade RESTful API** - Fully TypeScript Migrated, Security Hardened, and Performance Optimized.
+<div align="center">
 
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green)](https://nodejs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
-[![Status](https://img.shields.io/badge/Build-Success-brightgreen)](https://github.com/rak9b/localgem_l_backend)
-[![Security](https://img.shields.io/badge/Security-Audit_Passed-gold)](https://github.com/rak9b/localgem_l_backend)
+![Backend Banner](https://img.shields.io/badge/LocalGems-Backend%20Elite-43853D?style=for-the-badge&logo=node.js&logoColor=white)
+
+[![API Status](https://img.shields.io/badge/API-Live-success?style=for-the-badge&logo=render)](https://localgem-l-backend-3.onrender.com)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/)
+
+**A high-performance, security-hardened RESTful API powering the LocalGems ecosystem.**
+
+</div>
+
+---
+
+## 📖 **Overview**
+
+LocalGems Backend is a **production-ready engine** built with Node.js, Express, and Prisma. It implements strict type-safety, modular architecture, and advanced security practices to ensure a reliable foundation for global tour bookings.
+
+### **🌟 Highlights**
+
+- 🛡️ **Security Hardened** with Helmet, Rate-Limit, and CORS
+- 🔐 **Robust Auth** with JWT, Bcrypt, and custom Payload validation
+- 🐘 **PostgreSQL & Prisma** for high-integrity data management
+- 🧩 **Modular Hexagonal Design** for maximum scalability
+- 🛰️ **Real-time Engine** with Socket.io for instant messaging
+- 💳 **Stripe Integration** for secure transaction processing
 
 
 ---
