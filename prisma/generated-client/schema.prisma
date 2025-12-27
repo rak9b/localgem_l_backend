@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String    @id @default(uuid())
+  email      String    @unique
+  password   String
+  name       String
+  avatar     String?
+  role       UserRole  @default(USER)
+  bio        String?
+  location   String?
+  languages  String[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  bookings   Booking[]
+  reviews    Review[]
+  guideTours Tour[]    @relation("GuideTours")
+
+  @@map("users")
+}
+
+enum UserRole {
+  USER
+  GUIDE
+  ADMIN
+}
+
+model Tour {
+  id           String    @id @default(uuid())
+  title        String
+  description  String
+  itinerary    String
+  city         String
+  country      String
+  category     String
+  images       String[]
+  price        Float
+  duration     String
+  meetingPoint String
+  maxGroupSize Int
+  languages    String[]
+  coordinateX  Float?
+  coordinateY  Float?
+  rating       Float     @default(0)
+  isFeatured   Boolean   @default(false)
+  guideId      String
+  guide        User      @relation("GuideTours", fields: [guideId], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  bookings     Booking[]
+  reviews      Review[]
+
+  @@map("tours")
+}
+
+model Booking {
+  id                  String        @id @default(uuid())
+  userId              String
+  tourId              String
+  bookingDate         DateTime      @default(now())
+  tourDate            DateTime
+  status              BookingStatus @default(PENDING)
+  totalAmount         Float
+  guests              Int           @default(1)
+  paymentStatus       PaymentStatus @default(UNPAID)
+  specialRequirements String?
+  contactPhone        String?
+  user                User          @relation(fields: [userId], references: [id])
+  tour                Tour          @relation(fields: [tourId], references: [id])
+
+  @@map("bookings")
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PAID
+  UNPAID
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  tourId    String
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  tour      Tour     @relation(fields: [tourId], references: [id])
+
+  @@map("reviews")
+}
