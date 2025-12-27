@@ -29,8 +29,8 @@ const getAllTours = (0, catchAsync_1.default)(async (req, res) => {
     };
     // Pick pagination and sorting options
     const options = {
-        page: req.query.page,
-        limit: req.query.limit,
+        page: req.query.page ? Number(req.query.page) : undefined,
+        limit: req.query.limit ? Number(req.query.limit) : undefined,
         sortBy: req.query.sortBy,
         sortOrder: req.query.sortOrder,
     };

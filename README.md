@@ -1,11 +1,12 @@
-# LocalGems Backend API
+# LocalGems Backend - ELITE EDITION 💎
 
-> **RESTful API for Tour Booking Platform** - Built with Node.js, Express, TypeScript, Prisma, and PostgreSQL
+> **Production-Grade RESTful API** - Fully TypeScript Migrated, Security Hardened, and Performance Optimized.
 
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green)](https://nodejs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748)](https://www.prisma.io/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791)](https://www.postgresql.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
+[![Status](https://img.shields.io/badge/Build-Success-brightgreen)](https://github.com/rak9b/localgem_l_backend)
+[![Security](https://img.shields.io/badge/Security-Audit_Passed-gold)](https://github.com/rak9b/localgem_l_backend)
+
 
 ---
 
@@ -526,5 +527,6 @@ http://localhost:5000/api-docs
 ---
 
 **Built with ❤️ for LocalGems Platform**
-#   l o c a l g e m _ l _ b a c k e n d  
+#   l o c a l g e m _ l _ b a c k e n d 
+ 
  

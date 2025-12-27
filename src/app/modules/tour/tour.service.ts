@@ -1,5 +1,6 @@
+import { Prisma } from '../../../../prisma/generated-client';
 import prisma from '../../shared/prisma';
-import { ITour } from './tour.interface';
+import { ITour, ITourFilters, ITourOptions } from './tour.interface';
 
 const createTour = async (payload: ITour) => {
     const result = await prisma.tour.create({
@@ -9,13 +10,13 @@ const createTour = async (payload: ITour) => {
 };
 
 const getAllTours = async (
-    filters: any,
-    options: any
+    filters: ITourFilters,
+    options: ITourOptions
 ) => {
     const { search, minPrice, maxPrice, ...filterData } = filters;
     const { page = 1, limit = 10, sortBy, sortOrder } = options;
 
-    const andConditions: any[] = [];
+    const andConditions: Prisma.TourWhereInput[] = [];
 
     // Search condition
     if (search) {
@@ -61,25 +62,24 @@ const getAllTours = async (
                     equals: (filterData as any)[key],
                     mode: 'insensitive',
                 },
-            })),
+            })) as Prisma.TourWhereInput[],
         });
     }
 
-    const whereConditions: any = andConditions.length > 0 ? { AND: andConditions } : {};
+    const whereConditions: Prisma.TourWhereInput = andConditions.length > 0 ? { AND: andConditions } : {};
 
     // Pagination calculation
     const skip = (Number(page) - 1) * Number(limit);
     const take = Number(limit);
 
     // Sorting
-    const orderBy = {};
+    const orderBy: Prisma.TourOrderByWithRelationInput = {};
     if (sortBy && sortOrder) {
         (orderBy as any)[sortBy] = sortOrder;
     } else {
         (orderBy as any)['createdAt'] = 'desc';
     }
 
-    // @ts-ignore
     const result = await prisma.tour.findMany({
         where: whereConditions,
         skip,
@@ -95,7 +95,6 @@ const getAllTours = async (
         },
     });
 
-    // @ts-ignore
     const total = await prisma.tour.count({
         where: whereConditions,
     });
@@ -112,7 +111,6 @@ const getAllTours = async (
 };
 
 const getSingleTour = async (id: string) => {
-    // @ts-ignore
     const result = await prisma.tour.findUnique({
         where: {
             id,

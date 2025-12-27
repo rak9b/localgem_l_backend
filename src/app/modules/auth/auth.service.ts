@@ -3,6 +3,7 @@ import prisma from '../../shared/prisma';
 import bcrypt from 'bcrypt';
 import { createToken } from './auth.utils';
 import { ILoginUser, IUser } from './auth.interface';
+import { UserRole } from '../../../../prisma/generated-client';
 
 const registerUser = async (payload: IUser) => {
     const { name, email, password, avatar } = payload;
@@ -11,8 +12,7 @@ const registerUser = async (payload: IUser) => {
         Number(process.env.BCRYPT_SALT_ROUNDS) || 12
     );
 
-    // @ts-ignore
-    const result = await (prisma as any).user.create({
+    const result = await prisma.user.create({
         data: {
             name,
             email,
@@ -46,7 +46,7 @@ const loginUser = async (payload: ILoginUser) => {
     }
 
     const accessToken = createToken(
-        { email: user.email, role: user.role as string },
+        { email: user.email, role: user.role as UserRole },
         process.env.JWT_SECRET || 'secret',
         process.env.JWT_EXPIRES_IN || '1d'
     );

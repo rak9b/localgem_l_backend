@@ -10,7 +10,6 @@ const auth_utils_1 = require("./auth.utils");
 const registerUser = async (payload) => {
     const { name, email, password, avatar } = payload;
     const hashedPassword = await bcrypt_1.default.hash(password, Number(process.env.BCRYPT_SALT_ROUNDS) || 12);
-    // @ts-ignore
     const result = await prisma_1.default.user.create({
         data: {
             name,

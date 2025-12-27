@@ -72,7 +72,6 @@ const getAllTours = async (filters, options) => {
     else {
         orderBy['createdAt'] = 'desc';
     }
-    // @ts-ignore
     const result = await prisma_1.default.tour.findMany({
         where: whereConditions,
         skip,
@@ -87,7 +86,6 @@ const getAllTours = async (filters, options) => {
             guide: true,
         },
     });
-    // @ts-ignore
     const total = await prisma_1.default.tour.count({
         where: whereConditions,
     });
@@ -102,7 +100,6 @@ const getAllTours = async (filters, options) => {
     };
 };
 const getSingleTour = async (id) => {
-    // @ts-ignore
     const result = await prisma_1.default.tour.findUnique({
         where: {
             id,

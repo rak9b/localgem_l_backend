@@ -17,7 +17,7 @@ const createTour = catchAsync(async (req: Request, res: Response) => {
 
 const getAllTours = catchAsync(async (req: Request, res: Response) => {
     // Pick specific filter fields
-    const filters = {
+    const filters: any = {
         search: req.query.search,
         city: req.query.city,
         country: req.query.country,
@@ -28,16 +28,16 @@ const getAllTours = catchAsync(async (req: Request, res: Response) => {
 
     // Pick pagination and sorting options
     const options = {
-        page: req.query.page,
-        limit: req.query.limit,
-        sortBy: req.query.sortBy,
-        sortOrder: req.query.sortOrder,
+        page: req.query.page ? Number(req.query.page) : undefined,
+        limit: req.query.limit ? Number(req.query.limit) : undefined,
+        sortBy: req.query.sortBy as string | undefined,
+        sortOrder: req.query.sortOrder as 'asc' | 'desc' | undefined,
     };
 
     // Clean up undefined filters
     const validFilters: any = {};
     Object.keys(filters).forEach(key => {
-        if ((filters as any)[key]) validFilters[key] = (filters as any)[key];
+        if (filters[key]) validFilters[key] = filters[key];
     });
 
     const result = await TourService.getAllTours(validFilters, options);

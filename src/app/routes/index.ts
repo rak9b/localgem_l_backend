@@ -6,7 +6,7 @@ import { BookingRoutes } from '../modules/booking/booking.routes';
 
 const router = Router();
 
-const moduleRoutes: any[] = [
+const moduleRoutes: { path: string; route: Router }[] = [
     {
         path: '/auth',
         route: AuthRoutes,
