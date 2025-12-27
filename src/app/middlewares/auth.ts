@@ -13,16 +13,20 @@ const auth = (...requiredRoles: string[]) => {
 
             const decoded = jwt.verify(
                 token,
-                process.env.JWT_SECRET || 'secret'
-            ) as JwtPayload;
+                process.env.JWT_SECRET!
+            );
 
-            const { role } = decoded;
+            if (typeof decoded === 'object' && decoded !== null && 'id' in decoded && 'role' in decoded) {
+                const { role } = decoded as JwtPayload & { id: string; role: string };
 
-            if (requiredRoles.length && !requiredRoles.includes(role)) {
-                throw new Error('You are not authorized!');
+                if (requiredRoles.length && !requiredRoles.includes(role)) {
+                    throw new Error('You are not authorized!');
+                }
+
+                req.user = decoded as JwtPayload;
+            } else {
+                throw new Error('Invalid token payload');
             }
-
-            req.user = decoded as JwtPayload;
             next();
         } catch (error) {
             next(error);

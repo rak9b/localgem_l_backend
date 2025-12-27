@@ -11,5 +11,9 @@ export const createToken = (
 };
 
 export const verifyToken = (token: string, secret: string) => {
-    return jwt.verify(token, secret) as Record<string, any>;
+    const decoded = jwt.verify(token, secret);
+    if (typeof decoded === 'object' && decoded !== null && 'id' in decoded && 'role' in decoded) {
+        return decoded as JwtPayload & { id: string; role: string };
+    }
+    throw new Error('Invalid token payload');
 };
