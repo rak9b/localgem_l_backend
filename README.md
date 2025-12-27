@@ -248,36 +248,68 @@ Content-Type: application/json
 
 ---
 
-## 📁 Project Structure
+## 📁 Project Structure (Detailed)
 
-```
+```bash
 backend/
 ├── src/
 │   ├── app/
-│   │   ├── modules/
-│   │   │   ├── auth/           # Authentication
-│   │   │   ├── tour/           # Tour management
-│   │   │   ├── booking/        # Bookings
-│   │   │   ├── review/         # Reviews
-│   │   │   └── user/           # User profiles
-│   │   ├── middlewares/
-│   │   │   ├── auth.ts         # JWT verification
-│   │   │   ├── errorHandler.ts
-│   │   │   └── notFound.ts
-│   │   └── routes/
-│   │       └── index.ts        # Route aggregator
-│   ├── prisma/
-│   │   ├── schema.prisma       # Database schema
-│   │   └── seed.ts             # Seed data
-│   ├── app.ts                  # Express app
-│   └── server.ts               # Server entry
-├── .env                        # Environment variables
-├── .env.example
-├── ENVIRONMENT.md              # Env setup guide
-└── package.json
+│   │   ├── modules/           # Hexagonal-style Modules
+│   │   │   ├── auth/          # Authentication & JWT Logic
+│   │   │   ├── tour/          # Tour discovery & management
+│   │   │   ├── booking/       # Reservation lifecycle
+│   │   │   ├── review/        # Ratings & Feedback
+│   │   │   └── user/          # Profile & Role management
+│   │   ├── middlewares/       # Global & Route-specific guards
+│   │   │   ├── auth.ts        # RBAC & Token Verification
+│   │   │   ├── globalErrorHandler.ts
+│   │   │   └── validateRequest.ts # Zod Schema validation
+│   │   ├── routes/            # Main Route Aggregator
+│   │   ├── interfaces/        # Global TypeScript interfaces
+│   │   ├── errors/            # Custom AppError classes
+│   │   └── utils/             # Reusable helper functions
+│   ├── prisma/                # Database Architecture
+│   │   ├── schema.prisma      # Source of Truth for Models
+│   │   └── seed.ts            # Production-grade Seed Script
+│   ├── app.ts                 # Express Config (CORS, Rate-limit)
+│   └── server.ts              # Entry point & Socket.io init
+├── dist/                      # Compiled JS output
+├── node_modules/              # Dependencies
+├── .env                       # Secrets (Git-ignored)
+├── .env.example               # Configuration template
+├── render.yaml                # Infrastructure as Code
+└── package.json               # Scripts & Meta
 ```
 
 ---
+
+## 🏗️ Technical Architecture
+
+### 🔐 Request Lifecycle (Auth & RBAC)
+```mermaid
+sequenceDiagram
+    participant Client
+    participant AuthMiddleware
+    participant Controller
+    participant Service
+    participant Prisma
+    participant DB
+    Client->>AuthMiddleware: GET /api/v1/tours (Bearer Token)
+    AuthMiddleware->>AuthMiddleware: Verify JWT & Check Role
+    alt Token Invalid
+        AuthMiddleware-->>Client: 401 Unauthorized
+    else Role Insufficient
+        AuthMiddleware-->>Client: 403 Forbidden
+    end
+    AuthMiddleware->>Controller: req.user = payload
+    Controller->>Service: businessLogic()
+    Service->>Prisma: queryData()
+    Prisma->>DB: Execute SQL
+    DB-->>Prisma: Row Data
+    Prisma-->>Service: Typed Object
+    Service-->>Controller: Return Result
+    Controller-->>Client: 200 OK (JSON)
+```
 
 ## 🗄️ Database Schema
 
