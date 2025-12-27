@@ -12,6 +12,10 @@ const createToken = (jwtPayload, secret, expiresIn) => {
 };
 exports.createToken = createToken;
 const verifyToken = (token, secret) => {
-    return jsonwebtoken_1.default.verify(token, secret);
+    const decoded = jsonwebtoken_1.default.verify(token, secret);
+    if (typeof decoded === 'object' && decoded !== null && 'id' in decoded && 'role' in decoded) {
+        return decoded;
+    }
+    throw new Error('Invalid token payload');
 };
 exports.verifyToken = verifyToken;

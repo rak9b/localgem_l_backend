@@ -37,7 +37,7 @@ Server running at: **http://localhost:5000**
 
 ### Base URL
 ```
-http://localhost:5000/api/v1
+https://localgem-l-backend-3.onrender.com/api/v1
 ```
 
 ### 🔐 Authentication Endpoints
@@ -346,7 +346,7 @@ BCRYPT_SALT_ROUNDS=12
 
 # Server
 PORT=5000
-FRONTEND_URL=http://localhost:3000
+FRONTEND_URL=https://localgem-l-frontend-bx4r.vercel.app
 
 # Stripe
 STRIPE_SECRET_KEY=sk_test_...

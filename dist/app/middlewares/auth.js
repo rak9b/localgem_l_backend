@@ -11,12 +11,17 @@ const auth = (...requiredRoles) => {
             if (!token) {
                 throw new Error('You are not authorized!');
             }
-            const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET || 'secret');
-            const { role } = decoded;
-            if (requiredRoles.length && !requiredRoles.includes(role)) {
-                throw new Error('You are not authorized!');
+            const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+            if (typeof decoded === 'object' && decoded !== null && 'id' in decoded && 'role' in decoded) {
+                const { role } = decoded;
+                if (requiredRoles.length && !requiredRoles.includes(role)) {
+                    throw new Error('You are not authorized!');
+                }
+                req.user = decoded;
             }
-            req.user = decoded;
+            else {
+                throw new Error('Invalid token payload');
+            }
             next();
         }
         catch (error) {
