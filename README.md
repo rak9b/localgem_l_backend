@@ -11,154 +11,183 @@
 
 **A high-performance, security-hardened RESTful API powering the LocalGems ecosystem.**
 
-[API Base](https://localgem-l-backend-3.onrender.com/api/v1) • [Endpoints](#-complete-api-reference) • [Tech Stack](#-tech-stack) • [Quick Start](#-quick-start) • [Architecture](#-technical-architecture)
+[API Base](https://localgem-l-backend-3.onrender.com/api/v1) • [Endpoints](#8-api-documentation) • [Stack](#4-technology-stack) • [Setup](#5-installation--setup) • [Architecture](#3-architecture)
 
 </div>
 
 ---
 
-## 📖 **Overview**
+## 1. Project Overview
 
 LocalGems Backend is a **production-ready engine** built with Node.js, Express, and Prisma. It implements strict type-safety, modular architecture, and advanced security practices to ensure a reliable foundation for global tour bookings.
 
-### **🌟 Highlights**
+---
 
-- 🛡️ **Security Hardened** with Helmet, Rate-Limit, and CORS protection.
-- 🔐 **Robust Auth** with JWT, Bcrypt, and strict custom payload validation.
-- 🐘 **PostgreSQL & Prisma** for high-integrity, type-safe data management.
-- 🧩 **Modular hexagonal design** for maximum scalability and maintainability.
-- 🛰️ **Real-time Engine** with Socket.io for instant traveler-guide communication.
-- 💳 **Stripe Integration** for robust, enterprise-grade payment processing.
+## 2. Features
+
+- **RBAC Engine**: Dynamic Role-Based Access Control (Admin, Guide, Tourist).
+- **Listing Engine**: Robust tour discovery and inventory management.
+- **Booking Engine**: Secure reservation lifecycle with validation logic.
+- **Payment Engine**: Native Stripe integration for frictionless transactions.
+- **Messaging Engine**: Real-time event broadcasting via Socket.io.
 
 ---
 
-## 🏗️ **Technical Architecture**
+## 3. Architecture
 
-### **🔐 Request Lifecycle (Auth & RBAC)**
+### **Complete Backend Stack**
 ```mermaid
-sequenceDiagram
-    participant Client
-    participant AuthMiddleware
-    participant Controller
-    participant Service
-    participant Prisma
-    participant DB
-    Client->>AuthMiddleware: GET /api/v1/tours (Bearer Token)
-    AuthMiddleware->>AuthMiddleware: Verify JWT & Check Role
-    alt Token Invalid
-        AuthMiddleware-->>Client: 401 Unauthorized
-    else Role Insufficient
-        AuthMiddleware-->>Client: 403 Forbidden
+graph TB
+    subgraph "Request Layer"
+        Express[Express.js App]
+        Router[Modular Routes]
     end
-    AuthMiddleware->>Controller: req.user = payload
-    Controller->>Service: businessLogic()
-    Service->>Prisma: queryData()
-    Prisma->>DB: Execute SQL
-    DB-->>Prisma: Row Data
-    Prisma-->>Service: Typed Object
-    Service-->>Controller: Return Result
-    Controller-->>Client: 200 OK (JSON)
+
+    subgraph "Logic Layer"
+        Modules[Feature Modules]
+        Middlewares[Security Guards]
+        Services[Business Services]
+    end
+
+    subgraph "Data Layer"
+        Prisma[Prisma ORM]
+        DB[PostgreSQL]
+    end
+
+    Express --> Middlewares
+    Middlewares --> Router
+    Router --> Modules
+    Modules --> Services
+    Services --> Prisma
+    Prisma --> DB
 ```
 
 ---
 
-## 📍 **Complete API Reference**
+## 4. Technology Stack
 
-### **🔐 Authentication**
-- `POST /auth/register` - Create new traveler or guide account
-- `POST /auth/login` - Authenticate and receive JWT tokens
-- `POST /auth/refresh-token` - Renew session with refresh token
-
-### **🗺️ Tour Discovery**
-- `GET /tours` - List all tours with advanced filtering/sorting
-- `GET /tours/:id` - Detailed tour information & itineraries
-- `POST /tours` - Create new listing (**Guide/Admin**)
-- `PATCH /tours/:id` - Update tour details (**Guide Owned**)
-
-### **💼 Booking Lifecycle**
-- `POST /bookings` - Create reservation with Stripe token
-- `GET /bookings/my-bookings` - Fetch user-specific ride history
-- `PATCH /bookings/:id` - Moderate booking status (**Guide/Admin**)
+- **Runtime**: Node.js 20+
+- **Framework**: Express.js v5 (Edge)
+- **Language**: TypeScript 5.8
+- **ORM**: Prisma (PostgreSQL Client)
+- **Database**: PostgreSQL (Relational)
+- **Security**: JWT, Bcrypt, Helmet, CORS, Rate-Limit
 
 ---
 
-## 📁 **Project Structure (Detailed)**
+## 5. Installation & Setup
 
+### **Prerequisites**
+- Node.js 20+
+- PostgreSQL Server
+- Stripe API Keys
+
+### **Setup**
 ```bash
-backend/
-├── src/
-│   ├── app/
-│   │   ├── modules/           # Feature Modules (Hexagonal Structure)
-│   │   │   ├── auth/          # Authentication & Security logic
-│   │   │   ├── tour/          # Discovery & Management
-│   │   │   ├── booking/       # Reservation engine
-│   │   │   └── user/          # Profile & RBAC
-│   │   ├── middlewares/       # Security & Validation Guards
-│   │   │   ├── auth.ts        # JWT & Role validation
-│   │   │   └── validateReq.ts # Zod Schema validation
-│   │   ├── routes/            # API Route Aggregator
-│   │   └── utils/             # Business logic helpers
-│   ├── prisma/                # Database Layer
-│   │   ├── schema.prisma      # DB Schema (Source of Truth)
-│   │   └── seed.ts            # High-fidelity demo data
-│   ├── app.ts                 # Express configuration
-│   └── server.ts              # Entry point & WebSocket init
-├── .env.example               # Environment template
-└── render.yaml                # Infrastructure configuration
-```
-
----
-
-## 🛠️ **Tech Stack**
-
-<table>
-<tr>
-<td>
-
-**Core**
-- 🟢 Node.js 20+
-- 🚂 Express.js v5
-- 📘 TypeScript 5.8
-
-</td>
-<td>
-
-**Database**
-- 🐘 PostgreSQL
-- 💎 Prisma ORM
-- 💾 Prisma Studio (GUI)
-
-</td>
-<td>
-
-**Security**
-- 🔐 JWT / bcrypt
-- 🛡️ Helmet.js
-- 🛑 Rate Limiting
-
-</td>
-</tr>
-</table>
-
----
-
-## 🚀 **Quick Start**
-
-```bash
-# 1. Install dependencies
+# 1. Install
 npm install
 
-# 2. Setup Environment
-cp .env.example .env
-
-# 3. Initialize Database
+# 2. Database
+# Update .env with DATABASE_URL
 npx prisma generate
 npx prisma db push
-npm run seed
+npm run seed     # Essential for initial roles & users
 
-# 4. Start Development
+# 3. Start
 npm run dev
 ```
+
+---
+
+## 6. Project Structure
+
+```bash
+src/
+├── app/
+│   ├── modules/      # Domain Logic (auth, tour, booking, user)
+│   ├── middlewares/  # Authentication & Global Error Handling
+│   └── routes/       # Gateway Index
+├── prisma/           # Schema & Seeding
+└── server.ts         # Application Entry
+```
+
+---
+
+## 7. Authentication & Authorization
+
+- **Encryption**: Bcrypt hashing for password security.
+- **Tokens**: JWT access and refresh tokens for session management.
+- **Access**: Strictly enforced Role-Based authorization guards.
+
+---
+
+## 8. API Documentation
+
+- **Auth**: `/api/v1/auth/login` - Returns JWT.
+- **Tours**: `/api/v1/tours` - Multi-filter search.
+- **Bookings**: `/api/v1/bookings` - Private booking records.
+- **Status**: `/api/v1/health` - System health check.
+
+---
+
+## 9. Usage Instructions
+
+### **Manual Testing**
+Use Postman or Insomnia with the provided credentials:
+- **Admin**: `admin@localgems.com` / `123456`
+- **Guide**: `guide@localgems.com` / `123456`
+
+---
+
+## 10. Deployment Guide
+
+- **Platform**: Render.
+- **Provisioning**: Connect PostgreSQL instance first.
+- **Variables**: `JWT_SECRET`, `STRIPE_SECRET_KEY`, `DATABASE_URL`.
+
+---
+
+## 11. Development Guidelines
+
+- **Modular Pattern**: Separate controllers, services, and interfaces.
+- **Error Handling**: Use the global error middleware for consistent responses.
+- **Validation**: Use Zod schemas for all request payloads.
+
+---
+
+## 12. Security Considerations
+
+- **Password Hashing**: Bcrypt iterations set to 12 for high entropy.
+- **SQLi Prevention**: Prisma ORM provides native escaping/parameterization.
+- **DDoS Prevention**: Express-rate-limit configured for all routes.
+
+---
+
+## 13. Contribution Guidelines
+
+1. Follow the [Root Contribution Guide](../README.md#13-contribution-guidelines).
+2. Document all new API endpoints in the `README`.
+
+---
+
+## 14. License
+
+Licensed under **MIT**.
+
+---
+
+## 15. Roadmap
+
+- [ ] **Redis Caching**: Performance optimization for tour searches.
+- [ ] **Multi-provider Payment**: Support for PayPal and local gateways.
+- [ ] **API Documentation**: Interactive Swagger/OpenAPI documentation.
+
+---
+
+## 16. Support & Contact
+
+- **Email**: backend-support@localgems.com
+- **Issues**: [BE Track](https://github.com/rak9b/localgem_l_backend/issues)
 
 ---
 
