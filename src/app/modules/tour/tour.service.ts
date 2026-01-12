@@ -1,4 +1,4 @@
-import { Prisma } from '../../../../prisma/generated-client';
+import { Prisma } from '@prisma/client';
 import prisma from '../../shared/prisma';
 import { ITour, ITourFilters, ITourOptions } from './tour.interface';
 
